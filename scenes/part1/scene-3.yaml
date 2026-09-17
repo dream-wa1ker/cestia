@@ -1,0 +1,10 @@
+- id: P1S1_F
+  day: 2
+  text: |
+    Your legs won't cooperate. The shutter isn't happening today — you
+    settle for the alley bins instead, keeping low.
+  choices:
+    - label: "Keep searching the alley"
+      effect: {stamina: "-5", supplies: "+8"}
+      next_scene: p1_day03_intro
+

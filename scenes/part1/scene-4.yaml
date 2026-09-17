@@ -1,0 +1,10 @@
+- id: p1_day03_intro
+  day: 3
+  text: |
+    Day three. The hallway smells different now — sharper, wrong. You
+    have decisions to make and no way to unmake them.
+  radio:
+    - "[EMERGENCY BROADCAST] Classification updated: exposure risk is airborne-adjacent. Avoid close contact."
+  choices:
+    - label: "Move on"
+      next_scene: p1_day01_intro   # placeholder loop-back for this demo
