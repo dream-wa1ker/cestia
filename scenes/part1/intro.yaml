@@ -40,10 +40,10 @@
       # condition: "stamina > 20", you can add something like this here
 
       effect: {stamina: "-1", supplies: "+1", infection_exposure: "+5"}
-      next_scene: L082
+      next_scene: P1S3
     - label: "Grab the resources, Go outside the room to check what's out there."
       effect: {stamina: "-2", supplies: "+5", infection_exposure: "+2"}
-      next_scene: L182
+      next_scene: P1S4
 
 - id: P1S2
   day: 0
