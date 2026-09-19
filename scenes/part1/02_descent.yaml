@@ -1,0 +1,130 @@
+# The descent. `height` (meters above ground) drives everything here.
+# Every event scene ends with `next: P1.3`. That id is a CHAIN: it resolves by
+# height to the right stairwell, then the third floor, then the ground:
+#   P1.3 (height > 46) -> P1.4 (> 22) -> P1.5 (> 10) -> P1.6 third floor (> 0) -> P1.9 ground
+# Going down costs 12 m per stairwell decision (70 m = about six stairwells).
+
+- id: P1.3
+  title: The Stairwell
+  requires: {height: ">46"}
+  fallback: P1.4
+  text: |
+    Concrete steps, turn after turn, a landing every half flight. Someone has painted the floor numbers on the wall in red, counting down as you go. Your footsteps carry farther than you'd like. Light comes through slit windows and lies across the stairs in long bars.
+  left:
+    label: "Keep going down."
+    effect: {height: "-12", stamina: "-4", hours: "+1"}
+    next: pool:floors_up
+  right:
+    label: "Rest on the landing."
+    effect: {stamina: "+6", hours: "+3"}
+    next: P1.3
+
+- id: P1.4
+  title: The Stairwell
+  requires: {height: ">22"}
+  fallback: P1.5
+  text: |
+    The windows are boarded from here down, and the air changes: cold, close, faintly sweet. Grit crunches underfoot. Every sound you make goes down the shaft ahead of you and comes back a little different.
+  left:
+    label: "Keep going down."
+    effect: {height: "-12", stamina: "-4", hours: "+1"}
+    next: pool:floors_mid
+  right:
+    label: "Rest with your back against the wall."
+    effect: {stamina: "+6", hours: "+3"}
+    next: P1.4
+
+- id: P1.5
+  title: The Stairwell
+  requires: {height: ">10"}
+  fallback: P1.6
+  text: |
+    The lower floors are wrong in ways you notice slowly. Doors torn off their hinges. Scratches at head height. The smell is stronger here, and it isn't only rot. The note said not to linger. You have never wanted to listen to a note so much.
+  left:
+    label: "Keep going down."
+    effect: {height: "-12", stamina: "-4", hours: "+1"}
+    next: pool:floors_low
+  right:
+    label: "Rest for a moment. Quietly."
+    effect: {stamina: "+6", hours: "+2", infection_exposure: "+2"}
+    next: P1.5
+
+# ---- the third floor: where you fell. Variant chosen by the with_you roll. ----
+
+- id: P1.6
+  title: The Third Floor
+  requires: {height: ">0"}
+  requires_flag: {with_you: john}
+  fallback: P1.6.F
+  unlocks:
+    id: m_third
+    text: "The third-floor landing. The railing gave way. Someone was there with you, close enough to touch."
+  text: |
+    The third floor. You know it before you see it: a landing with a broken railing, and below it a one-floor drop onto the stairs. The dust is more disturbed here than anywhere else. Dark stains, old and dry. Two sets of prints that stop at the edge, and one that goes on.
+
+    Snagged on a splinter of the railing is a strip of dark green cloth. You know that coat. It is John's.
+
+    A flash of memory: the rail giving way, your own hand grabbing air. Someone's hands. Not pushing. Not catching, either.
+  left:
+    label: "Take the cloth as proof."
+    effect: {trust: "-1", hours: "+1", height: "-12"}
+    next: P1.3
+  right:
+    label: "Leave it where it hangs. You need answers before accusations."
+    effect: {trust: "+1", hours: "+1", height: "-12"}
+    next: P1.3
+
+- id: P1.6.F
+  title: The Third Floor
+  requires: {height: ">0"}
+  requires_flag: {with_you: jershy}
+  fallback: P1.9
+  unlocks:
+    id: m_third
+    text: "The third-floor landing. The railing gave way. Someone was there with you, close enough to touch."
+  text: |
+    The third floor. You know it before you see it: a landing with a broken railing, and below it a one-floor drop onto the stairs. The dust is more disturbed here than anywhere else. Dark stains, old and dry. Two sets of prints that stop at the edge, and one that goes on.
+
+    Caught in the bent railing is a pair of round glasses, one lens cracked. You know those glasses. They are Jershy's.
+
+    A flash of memory: the rail giving way, your own hand grabbing air. Someone's hands. Not pushing. Not catching, either.
+  left:
+    label: "Take the glasses as proof."
+    effect: {trust: "-1", hours: "+1", height: "-12"}
+    next: P1.3
+  right:
+    label: "Leave them where they lie. You need answers before accusations."
+    effect: {trust: "+1", hours: "+1", height: "-12"}
+    next: P1.3
+
+# ---- ground level: which stairwell you took decides which exit you get ----
+
+- id: P1.9
+  title: The Atrium
+  requires_flag: {stairs: east}
+  fallback: P1.9.W
+  text: |
+    The east stairs end in a wall of light. The lobby atrium: a glass roof half collapsed, a market of overturned stalls, and hundreds of shapes on the tiled floor that used to be people. The exit doors are on the far side, thirty meters of open floor away.
+
+    Nothing moves. That is the trouble. Nothing has to.
+  left:
+    label: "Cross slowly along the wall, staying in the shadow."
+    effect: {stamina: "-3", hours: "+2", infection_exposure: "+3"}
+    next: END.part1
+  right:
+    label: "Run straight for the doors."
+    effect: {stamina: "-8", health: "-3", infection_exposure: "+6", hours: "+1"}
+    next: END.part1
+
+- id: P1.9.W
+  title: The Service Door
+  text: |
+    The west stairs end in a narrow service corridor. A steel door at the far end, a hand-cart jammed against it, and a line of daylight under the frame. The letter was right. Nothing in here has ever been quiet, but nothing in here is awake.
+  left:
+    label: "Drag the cart aside, slowly."
+    effect: {stamina: "-3", hours: "+1"}
+    next: END.part1
+  right:
+    label: "Squeeze through the gap beside it."
+    effect: {stamina: "-1", health: "-3", infection_exposure: "+3"}
+    next: END.part1

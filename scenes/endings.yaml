@@ -28,3 +28,39 @@
   unlocks:
     id: m_john
     text: "John's voice, tired and close: 'Stay with me. Just stay awake.'"
+
+# ---- End of Part 1. Three variants, chosen by flags (dog first, then radio). ----
+
+- id: END.part1
+  title: Street Level
+  ending: true
+  requires_flag: {dog_ally: yes}
+  fallback: END.part1.R
+  text: |
+    You step out into the street. The light hurts. It is wider than it looked from seventy meters up, and quieter.
+
+    Behind you, a scrape of claws on concrete. The dog has followed you all the way down, and now it stands at your knee, watching the street as if it knows the way.
+
+    Somewhere out there is sector-81, and zone-245 with it. The diary in your bag is still mostly blank. It won't be for long. (End of Part 1.)
+
+- id: END.part1.R
+  title: Street Level
+  ending: true
+  requires_flag: {radio_contact: yes}
+  fallback: END.part1.F
+  text: |
+    You step out into the street. The light hurts. It is wider than it looked from seventy meters up, and quieter.
+
+    Far above you, in a room you will never see again, a radio clicks twice. Someone is still listening. Someone is still waiting for you to speak.
+
+    Somewhere out there is sector-81, and zone-245 with it. The diary in your bag is still mostly blank. It won't be for long. (End of Part 1.)
+
+- id: END.part1.F
+  title: Street Level
+  ending: true
+  text: |
+    You step out into the street. The light hurts. It is wider than it looked from seventy meters up, and quieter.
+
+    No dog, no voice, no one. Only the wrecks, the wind, and the long shadow of the tower behind you.
+
+    Somewhere out there is sector-81, and zone-245 with it. The diary in your bag is still mostly blank. It won't be for long. (End of Part 1.)

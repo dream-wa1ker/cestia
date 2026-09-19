@@ -1,0 +1,170 @@
+# PART 1: THE TOWER. The room and the top floor (fixed story spine).
+# Flags set here: kit (none/full), radio_contact (yes/muted), noisy, letter, stairs (west/east).
+
+- id: P1.0
+  title: The Note
+  text: |
+    You wake up with a bandage around your head. Before you lies a note.
+
+    "You met with an accident. You fell from the third floor of an abandoned building. Jershy used most of our resources to bring you back to a stable state. You might not remember most of what happened. The world has ended. The details will come back to you gradually. We have left a radio telecast for you to communicate with us, in case you are alive and read this note."
+
+    Signing off - John
+  radio:
+    - "[EMERGENCY BROADCAST : 18-07-2036:15:31] Do not visit zone-245 in sector-81..."
+  left:
+    label: "Explore the place you are in..."
+    effect: {stamina: "-5", hours: "+1"}
+    next: P1.0.L
+  right:
+    label: "Check the radio for any intel..."
+    effect: {hours: "+1"}
+    next: P1.0.R
+
+- id: P1.0.L
+  title: The Window
+  requires: {stamina: ">10"}
+  fallback: P1.0.L.F
+  text: |
+    You get up and walk to the window. A deserted land: cars crashed and crushed in the road, paint fading away, the skeletal remains of people. A dog roams between the wrecks. You are on a top floor, and the ground is very far down. Seventy meters, maybe.
+
+    Then the note comes back to you. Third floor. It said you fell from the third floor. Nothing about this window fits that.
+
+    You search the room. The telecast radio, a rusty knife, a worn-out backpack, the hospital bed you woke up in, a few packs of morphine tablets. Inside the backpack: a rechargeable torch, some clothes, and a blank diary.
+  left:
+    label: "Go out and see what is out there. Come back for the supplies later."
+    effect: {stamina: "-1", supplies: "+1", infection_exposure: "+5", hours: "+1"}
+    next: P1.1
+  right:
+    label: "Take the backpack, the torch and the supplies, then go out."
+    effect: {stamina: "-2", supplies: "+5", infection_exposure: "+2", hours: "+2"}
+    sets_flag: {kit: full}
+    next: P1.1
+
+- id: P1.0.L.F
+  title: Weak Legs
+  text: |
+    You push yourself up and your legs give out. The room tilts, and whatever they gave you for the pain is wearing thin. Whatever is out there will have to wait.
+  left:
+    label: "Sleep until you feel stronger."
+    effect: {stamina: "+15", hours: "+8"}
+    next: P1.0.L
+  right:
+    label: "Lie still and listen to the radio."
+    effect: {hours: "+1"}
+    next: P1.0.R
+
+- id: P1.0.R
+  title: Static
+  text: |
+    You turn the dial slowly. The hiss rolls over itself, and then the broadcast finds you: the same calm voice, the same warning, on a loop. Three days old, by the date it gives.
+
+    A strip of tape is stuck across the dial with a single letter in marker: J. Underneath, smaller: "hold the key down to talk." Both of them start with J. John. Jershy. You can't tell which one meant it.
+  left:
+    label: "Hold the key down and call for them."
+    effect: {trust: "+1", hours: "+1"}
+    sets_flag: {radio_contact: yes}
+    next: P1.0.R.L
+  right:
+    label: "Leave it. Listen first, talk later."
+    effect: {hours: "+1"}
+    next: P1.1
+
+- id: P1.0.R.L
+  title: The Click
+  text: |
+    You press the key. Your voice comes out rough. "This is... I'm awake. John? Jershy? Anyone."
+
+    Nothing but hiss. Ten seconds. Twenty. Then a click. And another, two clicks spaced like a knock. Like someone on the other end pressed the key and didn't dare to speak.
+  left:
+    label: "Wait for another click."
+    effect: {hours: "+2", trust: "+1"}
+    next: P1.1
+  right:
+    label: "Switch it off. You don't know who is listening."
+    effect: {hours: "+1"}
+    sets_flag: {radio_contact: muted}
+    next: P1.1
+
+- id: P1.1
+  title: The Door
+  text: |
+    The door won't open. It isn't stuck, it is held. A chair is jammed under the handle from the outside, and cable ties are looped through the handle and the frame. Someone wanted you to stay put, or wanted something else to stay out.
+
+    Through the crack you can see a strip of gray corridor.
+  left:
+    label: "Cut the ties with the rusty knife."
+    effect: {stamina: "-2", hours: "+1"}
+    next: P1.2
+  right:
+    label: "Throw your shoulder into it until it gives."
+    effect: {stamina: "-4", health: "-1"}
+    sets_flag: {noisy: yes}
+    next: P1.2
+
+- id: P1.2
+  title: The Corridor
+  text: |
+    A long, dim corridor, doors down both sides marked in masking tape and marker. WATER (EMPTY). SLEEP. And at the far end, one that says DO NOT OPEN - J.
+
+    In the dust on the floor: two sets of boot prints, and a long smear from the stairwell to your door, the kind a stretcher makes. Someone carried you up here. The note said you fell from the third floor. Whoever carried you did not stop at the third floor.
+  left:
+    label: "Open the door marked J."
+    effect: {stamina: "-1", hours: "+1"}
+    next: P1.2.J
+  right:
+    label: "Ignore it. Go to the stairwell."
+    next: P1.2.S
+
+- id: P1.2.J
+  title: The Room Marked J
+  text: |
+    A small storage room. A tray of empty vials, a roll of surgical tape, a folding chair facing a wall covered in hand-drawn diagrams of a skull and a spine. Your skull. Your spine, you realize, with a chill.
+
+    A sheet of paper is pinned above the chair, signed with a single letter.
+
+    "To whoever wakes up: take the WEST stairs. The EAST stairs cut through the lobby atrium, and you will not get through it quietly. Don't linger on the lower floors."
+  left:
+    label: "Pocket the letter and go."
+    sets_flag: {letter: yes}
+    next: P1.2.S
+  right:
+    label: "Search the room before you leave."
+    effect: {supplies: "+2", infection_exposure: "+3", hours: "+2"}
+    sets_flag: {letter: yes}
+    next: P1.2.S
+
+- id: P1.2.S
+  title: The Two Stairwells
+  requires_flag: {letter: yes}
+  fallback: P1.2.S.F
+  text: |
+    Two stairwell doors at the end of the corridor, WEST and EAST, each with a red 23 painted across it. Twenty-three floors. Twenty of them below you.
+
+    The letter said west. The east door is closer, and it is already ajar.
+  left:
+    label: "Take the west stairs, as the letter says."
+    effect: {stamina: "-2", hours: "+2"}
+    sets_flag: {stairs: west}
+    next: P1.3
+  right:
+    label: "Take the east stairs. It is closer."
+    effect: {stamina: "-1", hours: "+1"}
+    sets_flag: {stairs: east}
+    next: P1.3
+
+- id: P1.2.S.F
+  title: The Two Stairwells
+  text: |
+    Two stairwell doors at the end of the corridor, WEST and EAST, each with a red 23 painted across it. Twenty-three floors. Twenty of them below you.
+
+    You have nothing to go on. The smear on the floor leads to the east door: they carried you up that way. It might mean the east stairs are safe. It might only mean they were closest.
+  left:
+    label: "Take the west stairs."
+    effect: {stamina: "-2", hours: "+2"}
+    sets_flag: {stairs: west}
+    next: P1.3
+  right:
+    label: "Follow the smear. Take the east stairs."
+    effect: {stamina: "-1", hours: "+1"}
+    sets_flag: {stairs: east}
+    next: P1.3

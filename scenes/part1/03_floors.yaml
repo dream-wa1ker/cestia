@@ -1,0 +1,277 @@
+# Random floor events, drawn from the pool of the stairwell you are in.
+# Upper floors (pool floors_up): the ward Jershy built and the marks they left.
+# Middle floors (floors_mid): camps, apartments, darkness.
+# Lower floors (floors_low): where the danger is. Some scenes need a flag
+# (kit, noisy) so YOUR earlier decisions decide what the building throws at you.
+# Every scene ends with `next: P1.3`, which resolves to the right stairwell by height.
+
+# ============================ UPPER FLOORS ============================
+
+- id: POOL.floors_up.01
+  title: The Empty Ward
+  pool: floors_up
+  weight: 3
+  unlocks:
+    id: m_ward
+    text: "Jershy's hands, steady over you. 'Breathe. Stay with us.'"
+  text: |
+    A floor of former offices turned into a ward. Bed frames dragged together, sheets hung from curtain rods for privacy, IV bags on coat stands, all of it recently used and recently abandoned. On a whiteboard, in neat block letters, a log:
+
+    DAY 1 - unresponsive. Bleeding stopped.
+    DAY 2 - fever. Kept warm.
+    DAY 3 - stable. Moved to top floor. Quiet there.
+
+    Your name is at the top of the board. Under it, someone wrote one more line and rubbed it out, hard enough to leave a ghost on the surface.
+  left:
+    label: "Tilt your head to the light and read the rubbed-out line."
+    effect: {hours: "+1", stamina: "-1"}
+    next: POOL.floors_up.01.A
+  right:
+    label: "Search the cabinets."
+    effect: {supplies: "+2", infection_exposure: "+2", hours: "+1"}
+    next: P1.3
+
+- id: POOL.floors_up.01.A
+  title: The Ghost Line
+  unlocks:
+    id: m_ghost
+    text: "Someone wrote it, and someone rubbed it out. Whatever hurt you, it wasn't only the fall."
+  text: |
+    The marker has left a shadow in the plastic. You can make out only the end of it: "...WASN'T THE FALL."
+
+    Wasn't. Not "was not only." Not "was more than." Someone wanted this written down, and someone wanted it gone.
+  left:
+    label: "Copy it into your blank diary."
+    effect: {hours: "+1"}
+    next: P1.3
+  right:
+    label: "Leave it. You are not ready for this yet."
+    next: P1.3
+
+- id: POOL.floors_up.02
+  title: Chalk Marks
+  pool: floors_up
+  weight: 2
+  text: |
+    On the landing wall, in chalk: a big arrow pointing down and a J beside it. Below it, in a different hand, someone has scratched an X through the arrow so hard the plaster came away.
+
+    Two people disagreeing about the way down, and neither of them stayed to argue it out.
+  left:
+    label: "Trust the arrow."
+    effect: {trust: "+1", stamina: "-1", hours: "+1"}
+    next: P1.3
+  right:
+    label: "Trust the X. Take the other way down."
+    effect: {stamina: "-3", supplies: "+2", infection_exposure: "+2", hours: "+1"}
+    next: P1.3
+
+- id: POOL.floors_up.03
+  title: The Elevator Shaft
+  pool: floors_up
+  weight: 2
+  text: |
+    The elevator doors have been pried open and propped with a length of pipe. Beyond them, the shaft: cables, dark, a cold draft rising from far below. A rope is tied off to a bracket and drops into the black. Halfway down, a bag hangs from it, knotted on like a catch on a line.
+
+    Faster than the stairs. Maybe.
+  left:
+    label: "Climb down the rope for the bag."
+    effect: {stamina: "-5", hours: "+1"}
+    outcomes:
+      - weight: 6
+        effect: {supplies: "+4", height: "-12"}
+        next: POOL.floors_up.03.A
+      - weight: 4
+        effect: {health: "-10", height: "-12", infection_exposure: "+2"}
+        next: POOL.floors_up.03.B
+  right:
+    label: "Leave it. The stairs are slower, but they don't drop you."
+    effect: {stamina: "-1"}
+    next: P1.3
+
+- id: POOL.floors_up.03.A
+  title: Hand Over Hand
+  text: |
+    Your palms burn, but the rope holds. You reach the bag, and beyond it a service hatch. You pull yourself through onto a landing several floors down. Inside the bag: canned food and a lighter.
+  left:
+    label: "Eat something before going on."
+    effect: {supplies: "-1", stamina: "+8", hours: "+1"}
+    next: P1.3
+  right:
+    label: "Save it all. Keep moving."
+    next: P1.3
+
+- id: POOL.floors_up.03.B
+  title: The Rope Slips
+  text: |
+    The knot at the bracket slides. You drop a body length, two, and the rope burns through your palms before your boots crash onto a metal ledge. Everything hurts. The bag is gone. But you are several floors lower.
+  left:
+    label: "Sit until the shaking stops."
+    effect: {stamina: "+4", hours: "+2"}
+    next: P1.3
+  right:
+    label: "Get up and keep moving."
+    effect: {stamina: "-2"}
+    next: P1.3
+
+- id: POOL.floors_up.empty
+  title: A Bare Landing
+  text: |
+    Nothing here. Concrete, dust, and the sound of your own breathing.
+  left:
+    label: "Keep going."
+    effect: {hours: "+1"}
+    next: P1.3
+  right:
+    label: "Sit and catch your breath."
+    effect: {stamina: "+6", hours: "+2"}
+    next: P1.3
+
+# ============================ MIDDLE FLOORS ============================
+
+- id: POOL.floors_mid.01
+  title: The Camp
+  pool: floors_mid
+  weight: 3
+  unlocks:
+    id: m_map
+    text: "You circled zone-245 yourself, twice. You knew what was there."
+  text: |
+    A landing turned into a camp. A metal bin of cold ashes, two sleeping bags rolled tight, a tin of peaches with the lid peeled back, and a map of the district pinned to the wall, sectors marked in a grid. Zone-245 is circled in red, twice, in sector-81. Beside it in the margin: NO.
+
+    You look at the handwriting. It isn't John's. It isn't Jershy's. It is rounder, careful. You look at the pen callus on your own finger.
+  left:
+    label: "Take the map."
+    effect: {hours: "+1"}
+    sets_flag: {map: yes}
+    next: P1.3
+  right:
+    label: "Take the food. Leave the map where it is."
+    effect: {supplies: "+3", hours: "+1"}
+    next: P1.3
+
+- id: POOL.floors_mid.02
+  title: The Open Apartment
+  pool: floors_mid
+  weight: 3
+  text: |
+    One front door hangs open, and behind it an apartment. A table still set for two, dust on the plates. In the armchair by the window, facing the city, someone sits very still. Has sat very still for a long time. The bed in the next room is made.
+  left:
+    label: "Sleep in the made bed for a few hours."
+    effect: {stamina: "+20", hours: "+6", infection_exposure: "+3"}
+    next: P1.3
+  right:
+    label: "Search the kitchen."
+    effect: {supplies: "+3", stamina: "-1", hours: "+1"}
+    next: P1.3
+
+- id: POOL.floors_mid.03
+  title: Boarded Windows
+  pool: floors_mid
+  weight: 3
+  requires_flag: {kit: full}
+  text: |
+    Below this floor the stairwell goes black. Your torch cuts a small circle out of the dark, and the indicator shows two bars of battery.
+  left:
+    label: "Keep the torch on and move quickly."
+    effect: {stamina: "-1", hours: "+1"}
+    next: P1.3
+  right:
+    label: "Switch it off to save the battery. Go by touch."
+    effect: {supplies: "+2", stamina: "-3", infection_exposure: "+2", hours: "+2"}
+    next: P1.3
+
+- id: POOL.floors_mid.04
+  title: No Light
+  pool: floors_mid
+  weight: 3
+  requires_flag: {kit: none}
+  text: |
+    Below this floor the stairwell goes black. Your torch is upstairs on the hospital bed, beside the diary you never picked up. There is no going back for it. Twenty floors of stairs are twenty floors of stairs.
+  left:
+    label: "Feel your way down the wall, one step at a time."
+    effect: {stamina: "-3", hours: "+3"}
+    next: P1.3
+  right:
+    label: "Go fast and trust your feet."
+    effect: {health: "-6", stamina: "-1", hours: "+1"}
+    next: P1.3
+
+- id: POOL.floors_mid.empty
+  title: A Bare Landing
+  text: |
+    Nothing here but a fire hose, coiled and rotted, and a sign that says EXIT with no light behind it.
+  left:
+    label: "Keep going."
+    effect: {hours: "+1"}
+    next: P1.3
+  right:
+    label: "Sit and catch your breath."
+    effect: {stamina: "+6", hours: "+2"}
+    next: P1.3
+
+# ============================ LOWER FLOORS ============================
+
+- id: POOL.floors_low.01
+  title: The Speaker
+  pool: floors_low
+  weight: 3
+  radio:
+    - "[EMERGENCY BROADCAST : 20-07-2036:06:02] Classification updated: exposure risk is airborne-adjacent. Avoid close contact."
+  text: |
+    An emergency speaker is bolted high on the wall, still alive on a battery nobody remembered. It crackles, coughs, and then the same calm voice, but newer.
+
+    "Classification updated. Exposure risk is airborne-adjacent. Avoid close contact."
+  left:
+    label: "Tear a strip from your shirt and tie it over your face."
+    effect: {infection_exposure: "-4", stamina: "-1", hours: "+1"}
+    next: P1.3
+  right:
+    label: "Rip the speaker off the wall. You can't stand to hear it again."
+    effect: {stamina: "-3", hours: "+1"}
+    sets_flag: {noisy: yes}
+    next: P1.3
+
+- id: POOL.floors_low.02
+  title: Something Below
+  pool: floors_low
+  weight: 6
+  requires_flag: {noisy: yes}       # only if YOU made noise earlier
+  text: |
+    From far below, a slow dragging sound, then another. Something has heard you, from the door, or the speaker, or all the noise you have made since you woke. It has started to climb. It is not hurrying. It doesn't need to.
+  left:
+    label: "Stand still in the dark and let it pass."
+    effect: {stamina: "-1", infection_exposure: "+3", hours: "+2"}
+    next: P1.3
+  right:
+    label: "Run down to the next landing before it arrives."
+    effect: {stamina: "-7"}
+    next: P1.3
+
+- id: POOL.floors_low.03
+  title: The Dog
+  pool: floors_low
+  weight: 3
+  text: |
+    The dog from the window. Up close it is thin, ribs like a xylophone, one ear torn. It has been living on this landing, lying across the door of a cupboard as if guarding it. It watches you without moving.
+  left:
+    label: "Share what you have."
+    effect: {supplies: "-1", trust: "+1", hours: "+1"}
+    sets_flag: {dog_ally: yes}
+    next: P1.3
+  right:
+    label: "Back away slowly."
+    effect: {stamina: "-1", hours: "+1"}
+    next: P1.3
+
+- id: POOL.floors_low.empty
+  title: A Bare Landing
+  text: |
+    Nothing here but claw marks on the wall, and the feeling that it would be a good idea to be somewhere else.
+  left:
+    label: "Keep going."
+    effect: {hours: "+1"}
+    next: P1.3
+  right:
+    label: "Sit and catch your breath."
+    effect: {stamina: "+6", hours: "+2", infection_exposure: "+2"}
+    next: P1.3

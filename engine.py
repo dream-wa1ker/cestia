@@ -42,9 +42,13 @@ STARTING_STATE = {
     "supplies": 0,
     "trust": 0,
     "infection_exposure": 0,
+    "height": 70,  # meters above the ground; the story is a descent
     "hours": 10,   # game clock; 10 = 10:00 on day 0
     "days": 0,     # days survived (derived from hours)
 }
+
+# Story flags every run starts with
+STARTING_FLAGS = {"kit": "none"}
 
 CLOCK_START = datetime(2036, 7, 21, 0, 0)   # hour 0 of the game world
 
@@ -55,6 +59,7 @@ LIMITS = {
     "supplies": (0, 99),
     "trust": (-20, 20),
     "infection_exposure": (0, 100),
+    "height": (0, 70),
 }
 
 # Runs once each time a new in-game day begins
@@ -74,8 +79,9 @@ DEATH_RULES = [
 
 # Rolled once at the start of each run and stored in `flags`
 WORLD_ROLLS = {
-    "medicine_at": ["pharmacy", "clinic", "mall"],
-    "traitor": ["john", "jershy"],   # not used by any scene yet (hook for later)
+    # Which "J" was with you on the landing when you fell. Scenes read it with
+    # requires_flag: {with_you: john}
+    "with_you": ["john", "jershy"],
 }
 
 _OPS = {
@@ -269,6 +275,7 @@ class Engine:
         engine = cls(scenes, START_SCENE, dict(STARTING_STATE), seed=random.randrange(2**32))
         engine.history = history or {}
         engine.memories = set(memories or [])
+        engine.flags.update(STARTING_FLAGS)
         engine._roll_world()
         engine.enter(START_SCENE)
         return engine

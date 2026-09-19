@@ -117,7 +117,7 @@ function render(s) {
   $("day-line").innerHTML = "";
   $("day-line").append(`Day ${s.state.days}`);
   const small = document.createElement("small");
-  small.textContent = s.clock;
+  small.textContent = `${s.clock}   |   ${s.state.height} m above ground`;
   $("day-line").appendChild(small);
 
   renderStats(s.state);
