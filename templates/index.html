@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Untitled Survival Story</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <div id="app">
+    <main>
+      <header>
+        <span id="clock"></span>
+        <button id="toggle" type="button" aria-expanded="true">Status</button>
+      </header>
+
+      <section id="story">
+        <img id="scene-image" alt="" hidden>
+        <h1 id="title"></h1>
+        <div id="text"></div>
+      </section>
+
+      <section id="stage">
+        <div id="card">
+          <div class="reveal left" id="reveal-left"></div>
+          <div class="reveal right" id="reveal-right"></div>
+        </div>
+        <div id="ending" hidden>
+          <p id="ending-days"></p>
+          <p id="ending-best"></p>
+          <button id="restart" type="button">Try again</button>
+        </div>
+      </section>
+
+      <p id="hint">drag the card left or right</p>
+    </main>
+
+    <aside>
+      <div class="side-inner">
+        <div id="day-line"></div>
+        <div id="stats"></div>
+        <h2>Radio</h2>
+        <ul id="radio"></ul>
+        <h2>Diary</h2>
+        <ul id="diary"></ul>
+        <p id="record"></p>
+      </div>
+    </aside>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/game.js') }}"></script>
+</body>
+</html>

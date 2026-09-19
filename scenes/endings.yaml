@@ -1,0 +1,30 @@
+# Endings. `unlocks` saves a diary memory that survives death and shows in the
+# sidebar on every later run. The memory texts below are PLACEHOLDERS: replace
+# them with your real story fragments.
+
+- id: END.wounds
+  title: Too Weak to Go On
+  ending: true
+  text: |
+    Your body finally makes the decision for you. The room goes quiet, the radio hisses, and the light from the window slides slowly across the floor.
+  unlocks:
+    id: m_fall
+    text: "A flash of the fall: hands on your shoulders, someone shouting your name from the stairwell."
+
+- id: END.infection
+  title: The Fever
+  ending: true
+  text: |
+    The heat comes first, then the shaking. The corridor stretches, the numbers on the doors blur, and somewhere far away the radio keeps repeating its warning.
+  unlocks:
+    id: m_zone
+    text: "Zone-245. A fence, floodlights, and a number painted on a gate."
+
+- id: END.exhaustion
+  title: Nothing Left
+  ending: true
+  text: |
+    Your legs stop first, then your hands. You slide down against the wall and the corridor tilts away. You only meant to close your eyes for a moment.
+  unlocks:
+    id: m_john
+    text: "John's voice, tired and close: 'Stay with me. Just stay awake.'"
