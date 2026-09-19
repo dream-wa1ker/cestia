@@ -41,6 +41,8 @@ def get_engine() -> Engine:
 def payload(engine: Engine) -> dict:
     scene = engine.scenes[engine.current_id]
     image = scene.get("image")
+    has_radio = bool(engine.flags.get("has_radio"))   # set by the scene where you pick it up
+    has_diary = bool(engine.flags.get("has_diary"))
     return {
         "scene_id": scene["id"],
         "title": scene["title"],
@@ -54,8 +56,10 @@ def payload(engine: Engine) -> dict:
             for k, v in engine.state.items()
         },
         "clock": engine.clock(),
-        "radio": engine.radio_log,
-        "diary": list(db.load_memories().values()),
+        "has_radio": has_radio,
+        "has_diary": has_diary,
+        "radio": engine.radio_log if has_radio else [],
+        "diary": list(db.load_memories().values()) if has_diary else [],
         "best": db.best_days(),
         "runs": db.run_count(),
     }

@@ -49,7 +49,9 @@ header {
   color: var(--muted);
 }
 
-#toggle {
+.tools { display: flex; gap: 8px; }
+.tool {
+  position: relative;
   background: none;
   border: 1px solid var(--line);
   color: var(--muted);
@@ -58,7 +60,16 @@ header {
   cursor: pointer;
   font: inherit;
 }
-#toggle:hover { color: var(--ink); border-color: var(--muted); }
+.tool:hover { color: var(--ink); border-color: var(--muted); }
+.dot {   /* "something new" marker on Radio / Diary */
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+}
 
 /* ---- story above the card ---- */
 #story {
@@ -218,12 +229,49 @@ aside {
 .stat.danger .fill { background: var(--bad); }
 
 .side-inner ul { list-style: none; margin: 0; padding: 0; }
-#radio li {
-  font: 12px/1.5 var(--mono);
-  color: #9fb3a6;
-  padding: 6px 0;
-  border-bottom: 1px dashed var(--line);
-}
-#diary li { font-size: 15px; line-height: 1.5; padding: 6px 0; color: var(--ink); }
-#diary li.empty, #radio li.empty { color: var(--muted); font-style: italic; }
 #record { margin-top: 26px; font: 12px var(--mono); color: var(--muted); letter-spacing: 0.06em; }
+
+/* ---- full-screen pages: radio log and diary ---- */
+#page {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  overflow-y: auto;
+  animation: fade 0.3s ease both;
+}
+.page-inner { max-width: 680px; margin: 0 auto; padding: 28px 24px 60px; }
+#page-back {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font: 13px var(--mono);
+  letter-spacing: 0.08em;
+}
+#page-title {
+  margin: 26px 0 18px;
+  font-weight: normal;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-size: 15px;
+}
+#page-list { list-style: none; margin: 0; padding: 0; }
+
+/* radio: dark terminal, newest message first */
+#page.radio { background: #090d0b; color: #9fd6b0; font-family: var(--mono); }
+#page.radio #page-back, #page.radio #page-title { color: #5f8f6f; }
+#page.radio li { padding: 14px 0; border-bottom: 1px dashed #1c2a22; font-size: 14px; line-height: 1.6; }
+#page.radio .stamp { display: block; margin-bottom: 4px; font-size: 12px; letter-spacing: 0.08em; color: #5f8f6f; }
+
+/* diary: paper */
+#page.diary { background: #e8dec6; color: #2b2416; font-family: Georgia, "Times New Roman", serif; }
+#page.diary #page-back, #page.diary #page-title { color: #7a6a45; }
+#page.diary li {
+  padding: 14px 0 14px 16px;
+  border-left: 2px solid #b9a679;
+  margin-bottom: 14px;
+  font-size: 18px;
+  font-style: italic;
+  line-height: 1.6;
+}
+#page li.empty { color: #7d8791; font-style: italic; border-left: none; padding-left: 0; }

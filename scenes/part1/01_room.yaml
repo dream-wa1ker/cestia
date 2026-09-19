@@ -25,7 +25,7 @@
   requires: {stamina: ">10"}
   fallback: P1.0.L.F
   text: |
-    You get up and walk to the window. A deserted land: cars crashed and crushed in the road, paint fading away, the skeletal remains of people. A dog roams between the wrecks. You are on a top floor, and the ground is very far down. Seventy meters, maybe.
+    You get up and walk to the window. A deserted land: cars crashed and crushed in the road, paint fading away, the skeletal remains of people. A dog like creature roams between the wrecks. You are on a top floor, and the ground is very far down. Seventy meters, maybe.
 
     Then the note comes back to you. Third floor. It said you fell from the third floor. Nothing about this window fits that.
 
@@ -35,9 +35,9 @@
     effect: {stamina: "-1", supplies: "+1", infection_exposure: "+5", hours: "+1"}
     next: P1.1
   right:
-    label: "Take the backpack, the torch and the supplies, then go out."
+    label: "Take the backpack, the torch, the diary, the radio and the supplies, then go out."
     effect: {stamina: "-2", supplies: "+5", infection_exposure: "+2", hours: "+2"}
-    sets_flag: {kit: full}
+    sets_flag: {kit: full, has_radio: yes, has_diary: yes}
     next: P1.1
 
 - id: P1.0.L.F
@@ -60,9 +60,9 @@
 
     A strip of tape is stuck across the dial with a single letter in marker: J. Underneath, smaller: "hold the key down to talk." Both of them start with J. John. Jershy. You can't tell which one meant it.
   left:
-    label: "Hold the key down and call for them."
+    label: "Take the radio in your hands, hold the key down and call for them."
     effect: {trust: "+1", hours: "+1"}
-    sets_flag: {radio_contact: yes}
+    sets_flag: {radio_contact: yes, has_radio: yes}
     next: P1.0.R.L
   right:
     label: "Leave it. Listen first, talk later."

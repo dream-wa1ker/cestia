@@ -41,7 +41,7 @@
 
     Wasn't. Not "was not only." Not "was more than." Someone wanted this written down, and someone wanted it gone.
   left:
-    label: "Copy it into your blank diary."
+    label: "Write it down, so you cannot forget."
     effect: {hours: "+1"}
     next: P1.3
   right:

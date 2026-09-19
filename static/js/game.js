@@ -15,12 +15,20 @@ const STATS = [
 const $ = (id) => document.getElementById(id);
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+const TOOLS = ["radio", "diary"];   // buttons that appear once the item is picked up
+const PAGE_TEXT = {
+  radio: { title: "Radio", empty: "Nothing but static." },
+  diary: { title: "Diary", empty: "The pages are still blank." },
+};
+
 const card = $("card");
 const statEls = {};       // key -> { box, val, fill }
 let scene = null;         // the scene currently shown (server payload)
 let lastState = null;     // previous stats, to flash changes
 let busy = false;         // true while a card is flying away / loading
 let dragging = false, startX = 0, dx = 0;
+const seen = { radio: null, diary: null };   // what the player has already read
+let openedByUs = false;                      // did WE push the #radio / #diary history entry?
 
 // ---- server ------------------------------------------------------------------
 
@@ -79,14 +87,66 @@ function renderStats(state) {
   lastState = { ...state };
 }
 
-function fillList(id, items, emptyText) {
-  const list = $(id);
-  list.replaceChildren(...(items.length ? items : [emptyText]).map((text) => {
+const signature = (items) => items.join("\u0001");
+
+function renderTools(s) {
+  for (const key of TOOLS) {
+    const unlocked = s[`has_${key}`];
+    const items = s[key] || [];
+    const button = $(`btn-${key}`);
+    button.hidden = !unlocked;
+    const isNew = unlocked && items.length > 0 && signature(items) !== seen[key];
+    button.querySelector(".dot").hidden = !isNew;
+  }
+}
+
+function syncPage() {                 // show / hide the full-screen page from the URL hash
+  const key = location.hash.slice(1);
+  const page = $("page");
+  if (!TOOLS.includes(key) || !scene || !scene[`has_${key}`]) {
+    page.hidden = true;
+    return;
+  }
+  const items = scene[key];
+  page.className = key;
+  $("page-title").textContent = PAGE_TEXT[key].title;
+
+  const rows = key === "radio" ? [...items].reverse() : items;   // radio: newest first
+  $("page-list").replaceChildren(...(rows.length ? rows : [PAGE_TEXT[key].empty]).map((text) => {
     const li = document.createElement("li");
-    li.textContent = text;
-    if (!items.length) li.className = "empty";
+    if (!rows.length) {
+      li.className = "empty";
+      li.textContent = text;
+    } else if (key === "radio" && /^\[.+?\]/.test(text)) {   // "[stamp] message"
+      const [, stamp, body] = text.match(/^\[(.+?)\]\s*(.*)$/);
+      const s1 = document.createElement("span");
+      s1.className = "stamp";
+      s1.textContent = stamp;
+      li.append(s1, body);
+    } else {
+      li.textContent = text;          // textContent: never parsed as HTML
+    }
     return li;
   }));
+  page.hidden = false;
+  page.scrollTop = 0;
+  seen[key] = signature(items);
+  renderTools(scene);                 // clears the "new" dot
+}
+
+function openPage(key) {
+  openedByUs = true;
+  if (location.hash === `#${key}`) syncPage(); else location.hash = key;
+}
+
+function closePage() {
+  if (openedByUs) {
+    openedByUs = false;
+    history.back();                   // pops the hash we pushed
+  } else {
+    history.replaceState(null, "", location.pathname + location.search);
+    syncPage();
+  }
 }
 
 function render(s) {
@@ -121,8 +181,7 @@ function render(s) {
   $("day-line").appendChild(small);
 
   renderStats(s.state);
-  fillList("radio", s.radio, "No signal yet.");
-  fillList("diary", s.diary, "You remember nothing yet.");
+  renderTools(s);
   $("record").textContent = s.runs ? `Best: ${s.best} days  |  Runs: ${s.runs}` : "";
 }
 
@@ -220,6 +279,16 @@ $("toggle").addEventListener("click", () => {
   $("toggle").setAttribute("aria-expanded", String(!closed));
 });
 
+for (const key of TOOLS) $(`btn-${key}`).addEventListener("click", () => openPage(key));
+$("page-back").addEventListener("click", closePage);
+window.addEventListener("hashchange", () => {
+  if (!location.hash) openedByUs = false;
+  syncPage();
+});
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && !$("page").hidden) closePage();
+});
+
 $("restart").addEventListener("click", async () => {
   lastState = null;
   const res = await api("/api/restart", {});
@@ -228,4 +297,7 @@ $("restart").addEventListener("click", async () => {
 });
 
 buildStats();
-api("/api/scene").then((res) => render(res.data));
+api("/api/scene").then((res) => {
+  render(res.data);
+  syncPage();                         // handles reloading while on #radio / #diary
+});

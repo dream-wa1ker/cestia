@@ -372,7 +372,7 @@ class Engine:
         for msg in scene.get("radio", []):
             if msg not in self.radio_log:
                 self.radio_log.append(msg)
-        self.radio_log = self.radio_log[-8:]
+        self.radio_log = self.radio_log[-50:]
         unlock = scene.get("unlocks")
         if unlock and unlock["id"] not in self.memories:
             self.memories.add(unlock["id"])
